@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beton 💖</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* Açık kırmızımsı & tatlı pembe romantik arka plan */
+            background: linear-gradient(135deg, #ff758c, #ff7eb3, #ff4e50);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-size: 2.3rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        p.sub-title {
+            color: #fff0f5;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 500px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            color: #ffffff;
+            font-size: 1.3rem;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.15);
+        }
+
+        #timer {
+            font-size: 1.25rem;
+            color: #fff;
+            background: rgba(186, 24, 27, 0.25);
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            margin-top: 12px;
+            letter-spacing: 1px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        button {
+            background: #ffffff;
+            color: #d90429;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: #fff0f3;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* OYUN ALANI */
+        #game-board {
+            width: 100%;
+            height: 280px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px dashed rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 42px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s ease;
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+        }
+
+        .heart:hover {
+            transform: scale(1.3);
+        }
+
+        .big-heart {
+            font-size: 85px !important;
+            animation: pulse 0.8s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.25); }
+        }
+
+        /* ANİMASYONLU MESAJ KUTUSU */
+        #message-box {
+            font-size: 1.25rem;
+            color: #ffffff;
+            margin-top: 15px;
+            min-height: 60px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .fade-in {
+            animation: slideFade 0.5s forwards ease-out;
+        }
+
+        @keyframes slideFade {
+            0% {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>BETON 💖</h1>
+    <p class="sub-title">Seni Çok Seviyorum ✨</p>
+
+    <!-- 1. KISIM: AŞK SAYAÇ CARD -->
+    <div class="card">
+        <h2>⏱️ Tanıştığımızdan Beri Geçen Zaman</h2>
+        <div id="timer">Hesaplanıyor...</div>
+    </div>
+
+    <!-- 2. KISIM: KALP YAKALAMA OYUNU -->
+    <div class="card">
+        <h2>🎮 Kalpleri Yakala Beton!</h2>
+        <div id="message-box">Oyunu başlatmak için aşağıdaki butona bas bebem 👇</div>
+        <div id="game-board"></div>
+        <button onclick="startGame()">Oyunu Başlat 🚀</button>
+    </div>
+
+    <script>
+        // --- 1. AŞK SAYAÇ KODLARI (21 Temmuz 2024) ---
+        // JS Ay Mantığı: Temmuz için 6 yazılır
+        const startDate = new Date(2024, 6, 21, 0, 0, 0); 
+
+        function updateTimer() {
+            const now = new Date();
+            const diff = now.getTime() - startDate.getTime();
+
+            if (diff < 0) {
+                document.getElementById('timer').innerHTML = "Tarih henüz gelmedi!";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('timer').innerHTML = 
+                `${days} Gün ${hours} Saat ${minutes} Dakika ${seconds} Saniye`;
+        }
+        
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // --- 2. SIRALI KALP VE MESAJ OYUNU ---
+        const messages = [
+            "seni çok seviyom bi tanem ❤️",
+            "hayatııııımm 💕",
+            "yeriiimmmmm bi deneemmlerr 🥰",
+            "ooyy yutarııımm 🥳",
+            "oyunum nasıl olmuş 2 saatir buna uğraşıyorum dhsjfhdskjfds 🚀💖"
+        ];
+
+        let step = 0;
+        const board = document.getElementById('game-board');
+        const msgBox = document.getElementById('message-box');
+
+        function startGame() {
+            step = 0;
+            board.innerHTML = '';
+            showAnimatedMessage("Kalpler kaçıyor, hemen tıkla! 🏃‍♂️💨");
+            spawnNextHeart();
+        }
+
+        function showAnimatedMessage(text) {
+            msgBox.className = "";
+            void msgBox.offsetWidth; // Animasyon tetikleme
+            msgBox.className = "fade-in";
+            msgBox.innerText = text;
+        }
+
+        function spawnNextHeart() {
+            board.innerHTML = ''; 
+
+            if (step >= messages.length) {
+                return;
+            }
+
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerText = '💖';
+
+            if (step === messages.length - 1) {
+                heart.classList.add('big-heart');
+                heart.innerText = '💝';
+            }
+
+            const padding = step === messages.length - 1 ? 90 : 50;
+            const maxX = board.clientWidth - padding;
+            const maxY = board.clientHeight - padding;
+
+            const x = Math.max(10, Math.random() * (maxX > 0 ? maxX : 200));
+            const y = Math.max(10, Math.random() * (maxY > 0 ? maxY : 180));
+
+            heart.style.left = `${x}px`;
+            heart.style.top = `${y}px`;
+
+            heart.onclick = () => {
+                showAnimatedMessage(messages[step]);
+                step++;
+
+                if (step < messages.length) {
+                    setTimeout(() => {
+                        spawnNextHeart();
+                    }, 250);
+                }
+            };
+
+            board.appendChild(heart);
+        }
+    </script>
+</body>
+</html>
